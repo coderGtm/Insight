@@ -62,7 +62,7 @@ def showTableDataFrame(root, tables, tablesTree, cursor):
     tableDataTree["columns"]=columnNames
     tableDataTree.column("#0", width=0, stretch=tk.NO)
     for i in range(len(columnNames)):
-        tableDataTree.column(columnNames[i], width=100, minwidth=100, stretch=tk.NO)
+        tableDataTree.column(columnNames[i], width=500, minwidth=50, stretch=tk.NO)
         tableDataTree.heading(columnNames[i], text=columnNames[i],anchor=tk.W)
     tableDataTree.pack()
     # add data to treeview
