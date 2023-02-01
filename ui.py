@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from tkinter import messagebox
 import logic
 
 def clearView(view):
@@ -49,7 +50,11 @@ def showTablesFrame(root, tables, cursor):
 
 def showTableDataFrame(root, tables, tablesTree, cursor):
     # get currently selected table
-    selectedTable = tablesTree.item(tablesTree.focus())["values"][0]
+    try:
+        selectedTable = tablesTree.item(tablesTree.focus())["values"][0]
+    except IndexError:
+        messagebox.showerror("No Table Selected", "Select a Table or double-click it to open it.")
+        return
     # discard old frame
     clearView(root)
     # create frame
