@@ -39,6 +39,8 @@ def showTablesFrame(root, tables, cursor):
     for i in range(len(tables)):
         tablesTree.insert("", i, text=i+1, values=(tables[i][0],i+1))
 
+    tablesTree.bind("<Double-1>",lambda event: showTableDataFrame(root, tables, tablesTree, cursor))
+
     # create button to open the currently selected table in a new frame
     openTableBtn = tk.Button(tablesFrame,text="Open Table", command=lambda: showTableDataFrame(root, tables, tablesTree, cursor)).pack()
 
