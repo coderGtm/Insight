@@ -1,3 +1,4 @@
+from pathlib import Path
 from tkinter import filedialog
 import sqlite3
 import ui
@@ -12,6 +13,7 @@ def selectFile(root):
 
 def saveFilePath(filePath):
     with open("filePath.txt", "w") as f:
+        filePath = str(Path(filePath).parent)
         f.write(filePath)
 
 def getPrevFilePath():
