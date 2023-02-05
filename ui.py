@@ -10,13 +10,16 @@ def clearView(view):
 def showHomeFrame(root):
     # discard old frame
     clearView(root)
+    # set Title
+    root.title("Insight")
     # create frame
     homeFrame = tk.Frame(root)
     homeFrame.pack()
     # create label
-    homeLabel = tk.Label(homeFrame,text="DB Viewer").pack()
+    titleLabel = tk.Label(homeFrame,text="Insight", font=("Helvetica",50)).pack(padx=50,pady=20)
+    subTitleLabel = tk.Label(homeFrame,text="Database Viewer", font=("Terminal",20)).pack(padx=50,pady=10)
     # create button
-    openExplorerBtn = tk.Button(homeFrame,text="Select File", command=lambda: logic.selectFile(root)).pack()
+    openExplorerBtn = tk.Button(homeFrame,text="SELECT FILE", command=lambda: logic.selectFile(root), font=("Berlin",25)).pack(padx=50,pady=20)
 
 def showTablesFrame(root, tables, cursor):
     # discard old frame
