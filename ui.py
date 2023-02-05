@@ -57,6 +57,8 @@ def showTableDataFrame(root, tables, tablesTree, cursor, numOfRows):
     except IndexError:
         messagebox.showerror("No Table Selected", "Double-click a table to open it.")
         return
+    except ValueError:
+        messagebox.showerror("No Tables present.", "This Database is empty.")
     # discard old frame
     clearView(root)
     #set title
@@ -80,5 +82,28 @@ def showTableDataFrame(root, tables, tablesTree, cursor, numOfRows):
     for i in range(len(data)):
         tableDataTree.insert("", i, text=i+1, values=data[i])
 
+    tk.Label(tableDataFrame, text="Double-click on a row to expand it.", font=("System",10)).pack(pady=20)
+
+    tableDataTree.bind("<Double-1>",lambda event: showRowDetails(tableDataTree, data, columnNames))
+
     # create button to go back to tables frame
     backBtn = tk.Button(tableDataFrame,text="Back", font=("Courier",20), command=lambda: showTablesFrame(root, tables, numOfRows, cursor)).pack(pady=20)
+
+def showRowDetails(tableDataTree, data, columnNames):
+    # get currently selected row
+    try:
+        selectedRowIndex = int(tableDataTree.item(tableDataTree.focus())["text"])-1
+    except IndexError:
+        messagebox.showerror("No Row Selected", "Double-click a row to expand it.")
+        return
+    except ValueError:
+        messagebox.showerror("No Rows present", "This relation is empty.")
+        return
+
+    rowString = ""
+    for i in range(len(columnNames)):
+        colString = "{0}: {1}".format(columnNames[i], data[selectedRowIndex][i])
+        rowString += colString
+        rowString += "\n---------------------\n"
+
+    messagebox.showinfo("Expanded Row", rowString)
