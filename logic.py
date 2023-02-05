@@ -32,10 +32,25 @@ def openDB(root, filePath):
         return
     cursor = conn.cursor()
     # get table names
+    tables = getTableNames(cursor)
+    #get num of rows in each table
+    numOfRows = getNumOfRowsInAllTables(cursor, tables)
+    # show tables
+    ui.showTablesFrame(root, tables, numOfRows, cursor)
+
+def getTableNames(cursor):
     cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
     tables = cursor.fetchall()
-    # show tables
-    ui.showTablesFrame(root, tables, cursor)
+    return tables
+
+def getNumOfRowsInAllTables(cursor, tables):
+    numOfRows = []
+    for table in tables:
+        tableName = table[0]
+        cursor.execute("SELECT COUNT(*) FROM {0};".format(tableName))
+        numOfRows.append(cursor.fetchall()[0][0])
+
+    return numOfRows
 
 def getColumnNames(tableName, cursor):
     cursor.execute("PRAGMA table_info(" + tableName + ")")

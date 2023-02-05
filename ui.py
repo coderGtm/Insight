@@ -21,7 +21,7 @@ def showHomeFrame(root):
     # create button
     openExplorerBtn = tk.Button(homeFrame,text="SELECT FILE", command=lambda: logic.selectFile(root), font=("Berlin",25)).pack(padx=50,pady=20)
 
-def showTablesFrame(root, tables, cursor):
+def showTablesFrame(root, tables, numOfRows, cursor):
     # discard old frame
     clearView(root)
     # create frame
@@ -41,9 +41,9 @@ def showTablesFrame(root, tables, cursor):
     tablesTree.pack()
     # add data to treeview
     for i in range(len(tables)):
-        tablesTree.insert("", i, text=i+1, values=(tables[i][0],i+1))
+        tablesTree.insert("", i, text=i+1, values=(tables[i][0],numOfRows[i]))
 
-    tablesTree.bind("<Double-1>",lambda event: showTableDataFrame(root, tables, tablesTree, cursor))
+    tablesTree.bind("<Double-1>",lambda event: showTableDataFrame(root, tables, tablesTree, cursor, numOfRows))
 
     # create button to open the currently selected table in a new frame
     openTableBtn = tk.Button(tablesFrame,text="Open Table", command=lambda: showTableDataFrame(root, tables, tablesTree, cursor)).pack()
@@ -51,7 +51,7 @@ def showTablesFrame(root, tables, cursor):
     # create button to go back to home frame
     backBtn = tk.Button(tablesFrame,text="Back", command=lambda: showHomeFrame(root)).pack()
 
-def showTableDataFrame(root, tables, tablesTree, cursor):
+def showTableDataFrame(root, tables, tablesTree, cursor, numOfRows):
     # get currently selected table
     try:
         selectedTable = tablesTree.item(tablesTree.focus())["values"][0]
@@ -80,4 +80,4 @@ def showTableDataFrame(root, tables, tablesTree, cursor):
         tableDataTree.insert("", i, text=i+1, values=data[i])
 
     # create button to go back to tables frame
-    backBtn = tk.Button(tableDataFrame,text="Back", command=lambda: showTablesFrame(root, tables, cursor)).pack()
+    backBtn = tk.Button(tableDataFrame,text="Back", command=lambda: showTablesFrame(root, tables, numOfRows, cursor)).pack()
