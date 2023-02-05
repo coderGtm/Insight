@@ -24,47 +24,48 @@ def showHomeFrame(root):
 def showTablesFrame(root, tables, numOfRows, cursor):
     # discard old frame
     clearView(root)
+    #set title
+    root.title("Insight | Tables")
     # create frame
     tablesFrame = tk.Frame(root)
     tablesFrame.pack()
     # create label
-    tablesLabel = tk.Label(tablesFrame,text="Tables").pack()
+    tablesLabel = tk.Label(tablesFrame,text="Tables", font=("Arial",30)).pack(pady=20)
     # show tables in treeview widget with titles Sr no, Table Name, Rows Count
     tablesTree = ttk.Treeview(tablesFrame)
     tablesTree["columns"]=("one","two")
-    tablesTree.column("#0", width=50, minwidth=50, stretch=tk.NO)
-    tablesTree.column("one", width=100, minwidth=100, stretch=tk.NO)
-    tablesTree.column("two", width=100, minwidth=100, stretch=tk.NO)
+    tablesTree.column("#0", minwidth=50, stretch=tk.NO)
+    tablesTree.column("one", minwidth=100, stretch=tk.NO)
+    tablesTree.column("two", minwidth=50, stretch=tk.NO)
     tablesTree.heading("#0",text="Sr no",anchor=tk.W)
     tablesTree.heading("one", text="Table Name",anchor=tk.W)
     tablesTree.heading("two", text="Rows Count",anchor=tk.W)
-    tablesTree.pack()
+    tablesTree.pack(padx=20)
     # add data to treeview
     for i in range(len(tables)):
         tablesTree.insert("", i, text=i+1, values=(tables[i][0],numOfRows[i]))
 
     tablesTree.bind("<Double-1>",lambda event: showTableDataFrame(root, tables, tablesTree, cursor, numOfRows))
 
-    # create button to open the currently selected table in a new frame
-    openTableBtn = tk.Button(tablesFrame,text="Open Table", command=lambda: showTableDataFrame(root, tables, tablesTree, cursor)).pack()
-
     # create button to go back to home frame
-    backBtn = tk.Button(tablesFrame,text="Back", command=lambda: showHomeFrame(root)).pack()
+    backBtn = tk.Button(tablesFrame,text="Back", font=("Courier",20), command=lambda: showHomeFrame(root)).pack(pady=20)
 
 def showTableDataFrame(root, tables, tablesTree, cursor, numOfRows):
     # get currently selected table
     try:
         selectedTable = tablesTree.item(tablesTree.focus())["values"][0]
     except IndexError:
-        messagebox.showerror("No Table Selected", "Select a Table or double-click it to open it.")
+        messagebox.showerror("No Table Selected", "Double-click a table to open it.")
         return
     # discard old frame
     clearView(root)
+    #set title
+    root.title("Insight | {0}".format(selectedTable))
     # create frame
     tableDataFrame = tk.Frame(root)
     tableDataFrame.pack()
     # create label
-    tableDataLabel = tk.Label(tableDataFrame,text=selectedTable).pack()
+    tableDataLabel = tk.Label(tableDataFrame,text=selectedTable, font=("Arial",30)).pack(pady=20)
     columnNames = logic.getColumnNames(selectedTable, cursor)
     data = logic.getTableData(selectedTable, cursor)
     # show table data in treeview widget with column names
@@ -72,12 +73,12 @@ def showTableDataFrame(root, tables, tablesTree, cursor, numOfRows):
     tableDataTree["columns"]=columnNames
     tableDataTree.column("#0", width=0, stretch=tk.NO)
     for i in range(len(columnNames)):
-        tableDataTree.column(columnNames[i], width=500, minwidth=50, stretch=tk.NO)
+        tableDataTree.column(columnNames[i], minwidth=50, stretch=tk.NO)
         tableDataTree.heading(columnNames[i], text=columnNames[i],anchor=tk.W)
-    tableDataTree.pack()
+    tableDataTree.pack(padx=20)
     # add data to treeview
     for i in range(len(data)):
         tableDataTree.insert("", i, text=i+1, values=data[i])
 
     # create button to go back to tables frame
-    backBtn = tk.Button(tableDataFrame,text="Back", command=lambda: showTablesFrame(root, tables, numOfRows, cursor)).pack()
+    backBtn = tk.Button(tableDataFrame,text="Back", font=("Courier",20), command=lambda: showTablesFrame(root, tables, numOfRows, cursor)).pack(pady=20)
